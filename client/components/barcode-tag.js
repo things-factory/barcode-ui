@@ -8,7 +8,8 @@ export class BarcodeTag extends LitElement {
       bcWidth: Number,
       bcheight: Number,
       bcScale: Number,
-      value: String
+      value: String,
+      validity: Boolean
     }
   }
 
@@ -18,6 +19,23 @@ export class BarcodeTag extends LitElement {
         :host {
           display: flex;
           align-items: center;
+
+          position: relative;
+        }
+
+        canvas {
+          width: 100%;
+          height: 100px;
+        }
+
+        [dimmer] {
+          display: block;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background-color: rgba(255, 0, 0, 0.5);
         }
       `
     ]
@@ -26,28 +44,33 @@ export class BarcodeTag extends LitElement {
   render() {
     return html`
       <canvas></canvas>
+
+      ${!this.value || !this.validity
+        ? html`
+            <div dimmer></div>
+          `
+        : html``}
     `
   }
 
   updated(changes) {
-    console.log('updated', this.bcid, this.value)
     var options = {
-      bcid: this.bcid || 'code128',
-      width: this.bcWidth || 20,
-      height: this.bcHeight || 6,
-      scale: this.bcScale || 4,
+      bcid: this.bcid || 'code128', // Barcode type
+      height: this.bcHeight || 20, // Bar height, in millimeters
+      scale: this.bcScale || 3, // scaling factor
       text: this.value || '12345678990',
-      includetext: false,
+      // includetext: true,
       textalign: 'center'
     }
 
     let canvas = this.shadowRoot.querySelector('canvas')
 
-    bwipjs(canvas, options, function(err, cvs) {
+    bwipjs(canvas, options, (err, cvs) => {
       if (err) {
-        // handle the error
+        console.error(err)
+        this.validity = false
       } else {
-        // Don't need the second param since we have the canvas in scope...
+        this.validity = true
         // document.getElementById(myimg).src = canvas.toDataURL('image/png')
       }
     })

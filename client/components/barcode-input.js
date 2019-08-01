@@ -18,17 +18,22 @@ export class BarcodeInput extends LitElement {
         :host {
           display: flex;
           flex-direction: column;
-          height: 100px;
+          align-items: center;
+
+          padding: initial;
+          border: 0;
+        }
+
+        :host * {
+          align-self: stretch;
         }
 
         input {
-          flex: 0 0 auto;
-          margin: 0;
+          margin: 5px 0;
         }
 
         barcode-tag {
-          flex: 0 0 auto;
-          margin-top: auto;
+          margin: 5px 0;
         }
       `
     ]
