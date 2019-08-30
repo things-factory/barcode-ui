@@ -4,16 +4,20 @@
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
+  "native-module": true,
   "license": "MIT",
   "author": "heartyoh",
   "scripts": {
+    "postinstall": "node ./scripts/postinstall.js",
     "serve": "things-factory",
     "serve:dev": "npm run build:server && things-factory-dev",
-    "start:app": "things-factory-app",
-    "start:app:android": "things-factory-app --platform=android",
+    "start:app": "npm run compile:app && things-factory-app",
+    "start:app:android": "npm run start:app --platform=android",
     "emulate:app": "things-factory-app --emulate",
     "emulate:app:android": "things-factory-app --emulate --platform=android",
-    "build:app:android": "things-factory-app --platform=android --mode=build",
+    "compile:app": "webpack --config node_modules/@things-factory/shell/webpack.config.app.js",
+    "build:app": "npm run compile:app && things-factory-app --mode=build",
+    "build:app:android": "npm run build:app --platform=android --mode=build",
     "build": "npm run build:server && npm run build:client",
     "build:client": "npm run clean:client && webpack --config node_modules/@things-factory/shell/webpack.config.js",
     "build:server": "npm run clean:server && tsc",
@@ -30,7 +34,8 @@
   "dependencies": {
     "@things-factory/layout-base": "*",
     "@things-factory/shell": "*",
-    "bwip-js": "^1.7.3"
+    "bwip-js": "^1.7.3",
+    "cordova-plugin-qr-barcode-scanner": "*"
   },
   "devDependencies": {}
 }
