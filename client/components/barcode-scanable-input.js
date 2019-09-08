@@ -34,6 +34,7 @@ export class BarcodeScanableInput extends LitElement {
       name: {
         attribute: true
       },
+      scannable: Boolean,
       value: String
     }
   }
@@ -79,7 +80,21 @@ export class BarcodeScanableInput extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
-    this.reader = new BrowserMultiFormatReader()
+    this.scannable = false
+
+    if (navigator.mediaDevices) {
+      ;(async () => {
+        try {
+          var stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+          if (stream) {
+            stream.getTracks().forEach(track => track.stop())
+            this.scannable = true
+          }
+        } catch (e) {
+          console.error('this device not support camera for barcode scan', e)
+        }
+      })()
+    }
   }
 
   disconnectedCallback() {
@@ -92,6 +107,7 @@ export class BarcodeScanableInput extends LitElement {
     return html`
       <input type="text" .value=${this.value || ''} />
       <button
+        ?hidden=${!this.scannable}
         id="scan-button"
         @click=${e => {
           this.scan(e)
@@ -106,33 +122,50 @@ export class BarcodeScanableInput extends LitElement {
 
   async scan(e) {
     try {
-      /* video on */
       var template = document.createElement('scan-camera-template')
 
-      this.popup = openPopup(template, {
+      var popup = openPopup(template, {
         backdrop: true
       })
+      popup.onclosed = e => {
+        /* 뒤로가기 등으로 popup이 종료된 경우에도 scan 자원을 clear해준다. */
+        this.stopScan()
+      }
 
       /* template.video가 생성된 후에 접근하기 위해서, 한 프레임을 강제로 건너뛴다. */
       await this.updateComplete
 
       var constraints = { video: { facingMode: 'environment' } } /* backside camera first */
-      var stream = await navigator.mediaDevices.getUserMedia(constraints)
-      var result = await this.reader.decodeOnceFromStream(stream, template.video)
+      this.stream = await navigator.mediaDevices.getUserMedia(constraints)
 
-      this.input.value = result
+      this.reader = new BrowserMultiFormatReader()
+      if (!popup.closed && this.stream) {
+        var result = await this.reader.decodeOnceFromStream(this.stream, template.video)
+
+        this.input.value = result
+      } else {
+        /* popup이 비동기 진행 중에 close된 경우라면, stopScan()을 처리하지 못하게 되므로, 다시한번 clear해준다. */
+        this.stopScan()
+      }
     } catch (err) {
-      console.error(err)
+      /*
+       * 1. stream device 문제로 예외 발생한 경우.
+       * 2. 뒤로가기 등으로 popup이 종료된 경우에도 NotFoundException: Video stream has ended before any code could be detected. 이 발생한다.
+       */
+      console.warn(err)
     } finally {
-      /* video off */
+      popup.close()
+
       this.stopScan()
     }
   }
 
   stopScan() {
-    this.reader.reset()
-    this.popup && this.popup.close()
-    delete this.popup
+    this.stream && this.stream.getTracks().forEach(track => track.stop())
+    this.reader && this.reader.reset()
+
+    delete this.stream
+    delete this.reader
   }
 }
 
