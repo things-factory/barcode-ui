@@ -8,11 +8,8 @@ class ScanCameraTemplate extends LitElement {
   static get styles() {
     return css`
       video {
-        height: 400px;
-        width: 600px;
-        background-color: white;
-
-        border: 1px solid gray;
+        height: 100vh;
+        width: 100vw;
       }
     `
   }
@@ -119,10 +116,9 @@ export class BarcodeScanableInput extends LitElement {
       /* template.video가 생성된 후에 접근하기 위해서, 한 프레임을 강제로 건너뛴다. */
       await this.updateComplete
 
-      var devices = await this.reader.getVideoInputDevices()
-
-      var result = await this.reader.decodeFromInputVideoDevice(devices[0].deviceId, template.video)
-      // var result = await this.reader.decodeFromInputVideoDevice(undefined, template.video)
+      var constraints = { video: { facingMode: 'environment' } } /* backside camera first */
+      var stream = await navigator.mediaDevices.getUserMedia(constraints)
+      var result = await this.reader.decodeOnceFromStream(stream, template.video)
 
       this.input.value = result
     } catch (err) {
