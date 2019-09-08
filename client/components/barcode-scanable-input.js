@@ -11,6 +11,8 @@ class ScanCameraTemplate extends LitElement {
         height: 400px;
         width: 600px;
         background-color: white;
+
+        border: 1px solid gray;
       }
     `
   }
@@ -21,7 +23,7 @@ class ScanCameraTemplate extends LitElement {
 
   render() {
     return html`
-      <video id="video" width="300" height="200" style="border: 1px solid gray"></video>
+      <video></video>
     `
   }
 }
@@ -81,10 +83,6 @@ export class BarcodeScanableInput extends LitElement {
     super.connectedCallback()
 
     this.reader = new BrowserMultiFormatReader()
-
-    this.renderRoot.addEventListener('focusout', e => {
-      this.stopScan()
-    })
   }
 
   disconnectedCallback() {
@@ -111,8 +109,6 @@ export class BarcodeScanableInput extends LitElement {
 
   async scan(e) {
     try {
-      this.input.focus()
-
       /* video on */
       var template = document.createElement('scan-camera-template')
 
@@ -123,10 +119,10 @@ export class BarcodeScanableInput extends LitElement {
       /* template.video가 생성된 후에 접근하기 위해서, 한 프레임을 강제로 건너뛴다. */
       await this.updateComplete
 
-      // var devices = await this.reader.getVideoInputDevices()
+      var devices = await this.reader.getVideoInputDevices()
 
-      // var result = await this.reader.decodeFromInputVideoDevice(devices[0].deviceId, template.video)
-      var result = await this.reader.decodeFromInputVideoDevice(undefined, template.video)
+      var result = await this.reader.decodeFromInputVideoDevice(devices[0].deviceId, template.video)
+      // var result = await this.reader.decodeFromInputVideoDevice(undefined, template.video)
 
       this.input.value = result
     } catch (err) {
