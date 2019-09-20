@@ -5,15 +5,6 @@ import barcodeIcon from '../../assets/images/barcode.png'
 import { openPopup } from '@things-factory/layout-base'
 
 class ScanCameraTemplate extends LitElement {
-  static get styles() {
-    return css`
-      video {
-        height: 100vh;
-        width: 100vw;
-      }
-    `
-  }
-
   get video() {
     return this.shadowRoot.querySelector('video')
   }
@@ -125,7 +116,8 @@ export class BarcodeScanableInput extends LitElement {
       var template = document.createElement('scan-camera-template')
 
       var popup = openPopup(template, {
-        backdrop: true
+        backdrop: true,
+        size: 'large'
       })
       popup.onclosed = e => {
         /* 뒤로가기 등으로 popup이 종료된 경우에도 scan 자원을 clear해준다. */
