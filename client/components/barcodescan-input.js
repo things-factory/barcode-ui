@@ -16,33 +16,36 @@ export class BarcodescanInput extends LitElement {
       css`
         :host {
           display: flex;
-          flex-direction: row;
           align-items: center;
-          padding: initial;
-          border: 0;
+          border: none;
           overflow: hidden;
+          background-color: #fff;
+
+          padding: var(--custom-input-barcode-field-padding) !important;
         }
 
-        :host * {
+        * {
           align-self: stretch;
         }
 
-        :host > input {
-          flex: 1;
+        *:focus {
+          outline: none;
         }
 
-        :host > #scan-button {
-          width: 50px;
-          height: 50px;
-          flex-grow: 0;
-          flex-shrink: 0;
+        input {
+          flex: 1 !important;
           border: none;
-          padding: 0;
-          border: 1px solid #ccc;
-          border-radius: 10px;
+          font: var(--custom-input-barcode-field-font);
+          width: 10px;
+          flex-grow: 1;
+        }
+
+        #scan-button {
+          width: 30px;
+          height: 24px;
+          border: none;
           background-repeat: no-repeat;
           background-position: center;
-          background-size: 70%;
           background-image: var(--barcodescan-input-button-icon);
         }
       `
