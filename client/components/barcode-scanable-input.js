@@ -117,7 +117,8 @@ export class BarcodeScanableInput extends LitElement {
 
       var popup = openPopup(template, {
         backdrop: true,
-        size: 'large'
+        size: 'large',
+        closable: false
       })
       popup.onclosed = e => {
         /* 뒤로가기 등으로 popup이 종료된 경우에도 scan 자원을 clear해준다. */
