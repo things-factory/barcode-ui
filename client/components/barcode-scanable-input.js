@@ -61,8 +61,9 @@ export class BarcodeScanableInput extends LitElement {
 
         #scan-button {
           width: 30px;
-          height: 24px;
+          height: 100%;
           border: none;
+          background-color: transparent;
           background-repeat: no-repeat;
           background-position: center;
           background-image: var(--barcodescan-input-button-icon);
