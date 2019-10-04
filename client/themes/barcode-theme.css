@@ -1,0 +1,4 @@
+body {
+  --custom-input-barcode-field-font: normal 18px var(--theme-font);
+  --custom-input-barcode-field-padding: 2px 2px 2px 9px;
+}
