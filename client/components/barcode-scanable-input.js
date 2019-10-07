@@ -70,6 +70,10 @@ export class BarcodeScanableInput extends LitElement {
           background-position: center;
           background-image: var(--barcodescan-input-button-icon);
         }
+
+        #scan-button[hidden] {
+          display: none;
+        }
       `
     ]
   }
@@ -88,7 +92,7 @@ export class BarcodeScanableInput extends LitElement {
             this.scannable = true
           }
         } catch (e) {
-          console.error('this device not support camera for barcode scan', e)
+          console.warn('this device not support camera for barcode scan', e)
         }
       })()
     }
