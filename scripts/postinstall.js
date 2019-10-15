@@ -9,7 +9,7 @@ const APP_PACKAGE = require(path.resolve(APP_ROOT_PATH, 'package.json'))
 const module_resolve = require('resolve')
 
 const SHELL_PACKAGE_NAME = '@things-factory/shell'
-const SHELL_MODULE_PATH = path.resolve(module_resolve.sync(SHELL_PACKAGE_NAME), '../../')
+const SHELL_MODULE_PATH = path.resolve(module_resolve.sync(SHELL_PACKAGE_NAME), '..', '..')
 
 const SHELL_PACKAGE = require(path.resolve(SHELL_MODULE_PATH, 'package.json'))
 
