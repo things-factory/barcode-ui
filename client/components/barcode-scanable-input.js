@@ -146,6 +146,7 @@ export class BarcodeScanableInput extends LitElement {
         var result = await this.reader.decodeOnceFromStream(this.stream, template.video)
 
         this.input.value = result
+        this.dispatchEvent(new KeyboardEvent('keypress', { keyCode: 0x0d }))
       } else {
         /* popup이 비동기 진행 중에 close된 경우라면, stopScan()을 처리하지 못하게 되므로, 다시한번 clear해준다. */
         this.stopScan()
