@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element'
-import bwipjs from 'bwip-js'
+import bwipjs from '!bwip-js'
 
 export class BarcodeTag extends LitElement {
   static get properties() {
