@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@things-factory/layout-base": "^2.0.0",
-    "@things-factory/shell": "^2.0.0",
     "bwip-js": "^1.7.3",
     "cordova-plugin-qr-barcode-scanner": "*"
   },
