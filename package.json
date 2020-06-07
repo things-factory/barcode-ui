@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/barcode-ui",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
@@ -8,7 +8,6 @@
   "license": "MIT",
   "author": "heartyoh",
   "scripts": {
-    "postinstall": "node ./scripts/postinstall.js",
     "serve": "things-factory",
     "serve:dev": "npm run build:server && things-factory-dev",
     "start:app": "npm run compile:app && things-factory-app",
@@ -33,8 +32,7 @@
   },
   "dependencies": {
     "@things-factory/layout-base": "^2.0.0",
-    "bwip-js": "^1.7.3",
-    "cordova-plugin-qr-barcode-scanner": "*"
+    "bwip-js": "^1.7.3"
   },
   "devDependencies": {}
 }
